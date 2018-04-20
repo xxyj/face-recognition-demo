@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<style>
+    * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+    }
+
+    img {
+        width: 400px;
+    }
+
+    span {
+        position: relative;
+        display: inline-block;
+    }
+</style>
+
+<body>
+    <span><img id="image" style='display:none'/><div id='select'></div></span>
+    <video id='video' style='display:none'></video>
+    <canvas id='canvas' height=500 width=500></canvas>
+    <script>
+        const image = document.querySelector("#image")
+        const video = document.querySelector("#video")
+        const canvas = document.querySelector("#canvas")
+        const select = document.querySelector("#select")
+        const ctx = canvas.getContext('2d');
+        const faceDetector = new FaceDetector({
+            // 速度优先
+            fastMode: false,
+            // 最大识别
+            maxDetectedFaces: 5
+        });
+        navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            })
+            .then(function (mediaStream) {
+                video.src = window.URL.createObjectURL(mediaStream);
+                video.onloadedmetadata = function (e) {
+                    video.play();
+                };
+            })
+            .catch(function (error) {
+                console.log(error.name);
+            });
+
+        function draw() {
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            ctx.stroke();
+            
+            image.src = canvas.toDataURL('images/png');
+            image.onload = () => {
+                scale = canvas.width / image.width;
+                faceDetector.detect(image)
+                    .then(faces => {
+                        ctx.beginPath();
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = 'red';
+                        for (let face of faces) {
+                            ctx.rect(Math.floor(face.boundingBox.x * scale),
+                                Math.floor(face.boundingBox.y * scale),
+                                Math.floor(face.boundingBox.width * scale),
+                                Math.floor(face.boundingBox.height * scale));
+                        }
+                        ctx.stroke();
+                    })
+                requestAnimationFrame(draw)
+            }
+
+        }
+        draw()
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Shape Detection API Demo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        img {
+            width: 400px;
+        }
+
+        span {
+            position: relative;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="container">
+        <span><img alt="image" src='../../source/1.jpeg' /></span>
+        <span><img alt="image" src='../../source/2.jpeg' /></span>
+        <span><img alt="image" src='../../source/3.jpeg' /></span>
+        <span><img alt="image" src='../../source/4.jpg' /></span>
+        <span><img alt="image" src='../../source/5.jpg' /></span>
+        <span><img alt="image" src='../../source/6.jpeg' /></span>
+        <span><img alt="image" src='../../source/7.jpg' /></span>
+    </div>
+
+    <script type="text/javascript">
+        const imgList = document.getElementsByTagName('img')
+        const faceDetector = new FaceDetector({
+            // 速度优先
+            fastMode: true,
+            // 最大识别
+            maxDetectedFaces: 5
+        });
+        window.onload = main();
+
+        function load(image) {
+            image.onload = function () {
+                setTimeout(handleDetect(image), 100);
+            };
+        }
+
+        function handleDetect(image) {
+            const rate = image.offsetWidth / image.naturalWidth;
+            faceDetector.detect(image)
+                .then(detectedFaces => {
+                    for (const face of detectedFaces) {
+                        const bound = document.createElement('div');
+                        bound.style.position = 'absolute';
+                        bound.style.left = rate * face.boundingBox.x + 'px';
+                        bound.style.top = rate * face.boundingBox.y + 'px';
+                        bound.style.width = rate * face.boundingBox.width + 'px';
+                        bound.style.height = rate * face.boundingBox.height + 'px';
+                        bound.style.border = '2px solid red';
+                        bound.style.borderRadius = '50%';
+                        bound.style.backgroundColor = 'rgba(0, 0, 255, 0.25)';
+                        image.parentNode.appendChild(bound);
+                    }
+                })
+                .catch((e) => {
+                    console.error("Face Detection failed, boo.", e);
+                });
+        }
+
+        function main() {
+            for (const img of imgList) {
+                load(img)
+            }
+        }
+    </script>
+</body>
+
+</html>
