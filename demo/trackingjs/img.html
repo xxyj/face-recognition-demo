@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>trackingjs demo</title>
+    <script src="../lib/tracking-min.js"></script>
+    <script src="../lib/face-min.js"></script>
+    <script src="../lib/eye-min.js"></script>
+    <script src="../lib/mouth-min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        img {
+            width: 400px;
+        }
+
+        span {
+            position: relative;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="container">
+        <span><img id="img1" alt="image" src='../../source/1.jpeg' /></span>
+        <span><img id="img2" alt="image" src='../../source/2.jpeg' /></span>
+        <span><img id="img3" alt="image" src='../../source/3.jpeg' /></span>
+        <span><img id="img4" alt="image" src='../../source/4.jpg' /></span>
+        <span><img id="img5" alt="image" src='../../source/5.jpg' /></span>
+        <span><img id="img6" alt="image" src='../../source/6.jpeg' /></span>
+        <span><img id="img7" alt="image" src='../../source/7.jpg' /></span>
+    </div>
+
+    <script type="text/javascript">
+        const imgList = document.getElementsByTagName('img')
+        window.onload = function () {
+            handleDetect(1)
+        };
+
+        function handleDetect(i) {
+            if (i > 7) {
+                return
+            }
+            var tracker = new tracking.ObjectTracker(['face', 'eye', 'mouth']);
+            var image = document.getElementById(`img${i}`)
+            tracking.track(`#img${i}`, tracker);
+            tracker.on('track', function (event) {
+                event.data.forEach(function (face) {
+                    const bound = document.createElement('div');
+                    bound.style.position = 'absolute';
+                    bound.style.left = face.x + 'px';
+                    bound.style.top = face.y + 'px';
+                    bound.style.width = face.width + 'px';
+                    bound.style.height = face.height + 'px';
+                    bound.style.border = '2px solid red';
+                    bound.style.borderRadius = '50%';
+                    bound.style.backgroundColor = 'rgba(0, 0, 255, 0.25)';
+                    image.parentNode.appendChild(bound);
+                });
+            });
+            handleDetect(++i)
+        }
+    </script>
+</body>
+
+</html>

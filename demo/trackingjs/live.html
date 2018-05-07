@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>tracking.js - face with camera</title>
+
+    <script src="../lib/tracking-min.js"></script>
+    <script src="../lib/face-min.js"></script>
+
+    <style>
+        video,
+        canvas {
+            left:50%;
+            top:50%;
+            margin-top:-200px;
+            margin-left:-250px;
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="demo-frame">
+        <div class="demo-container">
+            <video id="video" width="500" height="400"></video>
+            <canvas id="canvas" width="500" height="400"></canvas>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function () {
+            var video = document.getElementById('video');
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+
+            var tracker = new tracking.ObjectTracker("face");
+            tracker.setInitialScale(4);
+            tracker.setStepSize(2);
+            tracker.setEdgesDensity(0.1);
+
+            tracking.track('#video', tracker, {
+                camera: true
+            });
+            video.play()
+
+            tracker.on('track', function (event) {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                event.data.forEach(function (rect) {
+                    context.strokeStyle = '#a64ceb';
+                    context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+                    context.font = '11px Helvetica';
+                    context.fillStyle = "#fff";
+                    context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+                    context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+                });
+            });
+        };
+    </script>
+
+</body>
+
+</html>

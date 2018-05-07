@@ -30,7 +30,11 @@
 
 <body>
     <span><img id="image" style='display:none'/></span>
-    <video id='video' style='display:none'></video>
+    <video id="video" width="800" height="530" src='../../source/jump.mp4'
+        style='display:none'>
+        <!--<source src="../../source/jump.mp4" type="video/mp4">
+        <source src="../../source/jump.ogv" type="video/ogg">-->
+    </video>
     <canvas id='canvas' width=500 height=500></canvas>
     <script>
         window.onload = function () {
@@ -48,19 +52,6 @@
                 // 最大识别
                 maxDetectedFaces: 5
             });
-            navigator.mediaDevices.getUserMedia({
-                    video: true,
-                    audio: true
-                })
-                .then(function (mediaStream) {
-                    video.src = window.URL.createObjectURL(mediaStream);
-                    video.onloadedmetadata = function (e) {
-                        video.play();
-                    };
-                })
-                .catch(function (error) {
-                    console.log(error.name);
-                });
             // 带上眼镜非常不准
             function draw() {
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -87,6 +78,7 @@
                 }
 
             }
+            video.play();
             draw()
         }()
     </script>

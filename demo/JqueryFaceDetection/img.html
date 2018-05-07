@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>jQuery FaceDetection Examples</title>
+    <style>
+        .picture-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .picture {
+            display: block;
+            width:400px;
+        }
+
+        .face {
+            border: 2px solid red;
+            border-radius: 50%;
+            background-Color: rgba(0, 0, 255, 0.25);
+        }
+    </style>
+</head>
+
+<body>
+
+    <span class="picture-container">
+        <img id="img1" class="picture" src="../../source/1.jpeg">
+    </span>
+    <span class="picture-container">
+        <img id="img2" class="picture" src="../../source/2.jpeg">
+    </span>
+    <span class="picture-container">
+        <img id="img3" class="picture" src="../../source/3.jpeg">
+    </span>
+    <span class="picture-container">
+        <img id="img4" class="picture" src="../../source/4.jpg">
+    </span>
+    <span class="picture-container">
+        <img id="img5" class="picture" src="../../source/5.jpg">
+    </span>
+    <span class="picture-container">
+        <img id="img6" class="picture" src="../../source/6.jpeg">
+    </span>
+    <span class="picture-container">
+        <img id="img7" class="picture" src="../../source/7.jpg">
+    </span>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="../lib/jquery.facedetection.js"></script>
+    <script>
+        /* global $ */
+        window.onload = function () {
+            for (var i = 1; i < 8; i++) {
+                $(`#img${i}`).faceDetection({
+                    complete: function (faces) {
+                        for (var i = 0; i < faces.length; i++) {
+                            $('<div>', {
+                                    'class': 'face',
+                                    'css': {
+                                        'position': 'absolute',
+                                        'left': faces[i].x * faces[i].scaleX + 'px',
+                                        'top': faces[i].y * faces[i].scaleY + 'px',
+                                        'width': faces[i].width * faces[i].scaleX + 'px',
+                                        'height': faces[i].height * faces[i].scaleY + 'px'
+                                    }
+                                })
+                                .insertAfter(this);
+                        }
+                    },
+                    error: function (code, message) {
+                        alert('Error: ' + message);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

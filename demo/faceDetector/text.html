@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<img id='img' src='../../source/txt1.jpg' />
+
+<body>
+    <script>
+        window.onload = function () {
+            if (!window.TextDetector) {
+                alert('该浏览器不支持文字识别，Chrome 54+')
+                return;
+            }
+            const image = document.querySelector('#img')
+            var textDetector = new TextDetector();
+            textDetector.detect(image)
+                .then(boundingBoxes => {
+                    for (let box of boundingBoxes) {
+                        //box.rawValue 一直为空，看来是没有实现
+                        // speechSynthesis.speak(new SpeechSynthesisUtterance(box.rawValue));
+                    }
+                    // 假装识别出了这些文字
+                    speechSynthesis.speak(new SpeechSynthesisUtterance("我一路微笑朝你走来，不必看到我曾经踏过泥泞伤痕累累，但请你张开双臂抱抱我，告诉我，一切都会过去，一切都是值得"));
+                })
+                .catch(err => console.error(err));
+        }
+    </script>
+</body>
+
+</html>
