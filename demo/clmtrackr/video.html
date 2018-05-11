@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Face tracker</title>
+    <meta charset="utf-8">
+    <style>
+        #container {
+            position: relative;
+            margin: auto;
+            width: 500px;
+        }
+
+        #canvas {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="../lib/clmtrackr.min.js"></script>
+    <div id="content">
+        <h2>Example</h2>
+        <div id="container">
+            <video id="video" width="500" height="400" autoplay loop src='../../source/jump.mp4'>
+            </video>
+            <canvas id="canvas" width="500" height="400"></canvas>
+            <p id="positions"></p>  
+        </div>
+
+        <script>
+            var videoInput = document.getElementById('video');
+            var ctracker = new clm.tracker();
+            var canvasInput = document.getElementById('canvas');
+            var cc = canvasInput.getContext('2d');
+            ctracker.init();
+            ctracker.start(videoInput);
+
+            function positionLoop() {
+                requestAnimationFrame(positionLoop);
+                var positions = ctracker.getCurrentPosition();
+                var positionString = "";
+                if (positions) {
+                    for (var p = 0; p < 10; p++) {
+                        positionString += "featurepoint " + p + " : [" + positions[p][0].toFixed(2) + "," + positions[p]
+                            [1].toFixed(2) + "]<br/>";
+                    }
+                    document.getElementById('positions').innerHTML = positionString;
+                }
+            }
+
+            function drawLoop() {
+                requestAnimationFrame(drawLoop);
+                cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
+                ctracker.draw(canvasInput);
+            }
+            positionLoop();
+            drawLoop();
+        </script>
+    </div>
+</body>
+
+</html>

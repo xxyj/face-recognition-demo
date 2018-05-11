@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>jQuery FaceDetection Examples</title>
+    <style>
+        .video-container {
+            position: relative;
+            width: 400px;
+            height: auto;
+            margin: 20px auto;
+            border: 10px solid #fff;
+            box-shadow: 0 5px 5px #000;
+        }
+
+        .video {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .face {
+            position: absolute;
+            border: 2px solid red;
+            background-Color: rgba(0, 0, 255, 0.25);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="video-container">
+        <video id="video" class="video" loop src='../../source/jump.mp4'>
+        </video>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="../lib/jquery.facedetection.js"></script>
+    <script>
+        /* global $ */
+        window.onload = function () {
+            $('#video')[0].play();
+            window.setInterval(() => {
+                $('.face').remove()
+                if ($('#video')[0].paused) {
+                    $('#video')[0].play();
+                    return;
+                }
+                // 暂停了才能识别
+                $('#video')[0].pause();
+                $('#video').faceDetection({
+                    interval: 1,
+                    complete: function (faces) {
+                        for (var i = 0; i < faces.length; i++) {
+                            $('<div>', {
+                                    'class': 'face',
+                                    'css': {
+                                        'position': 'absolute',
+                                        'left': faces[i].x + 'px',
+                                        'top': faces[i].y + 'px',
+                                        'width': faces[i].width + 'px',
+                                        'height': faces[i].height + 'px'
+                                    }
+                                })
+                                .insertAfter(this);
+                        }
+                    },
+                    error: function (code, message) {
+                        alert('Error: ' + message);
+                    }
+                });
+            }, 30)
+
+        }
+    </script>
+</body>
+
+</html>
