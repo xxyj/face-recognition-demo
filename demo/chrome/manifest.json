@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+  "name": "读读看",
+  "version": "1.0",
+  "description": "妈妈再也不用担心我不会读了 ",
+  // 右键 菜单
+  "permissions": ["contextMenus"],
+  "background": {
+    "scripts": ["background.js"]
+  }
+  //   "browser_action": {
+  //     "default_icon": {},
+  //     "default_title": "xx念",
+  //     "content_scripts": [
+  //       {
+  //         "matches": ["*://*/*"],
+  //         "js": ["read.js"]
+  //       }
+  //     ]
+  //   }
+}
