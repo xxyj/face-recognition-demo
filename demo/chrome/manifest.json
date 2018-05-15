@@ -7,6 +7,14 @@
   "permissions": ["contextMenus"],
   "background": {
     "scripts": ["background.js"]
+  },
+  "icons": {
+    "16": "icon.png"
+  },
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png",
+    "default_title": "读读看"
   }
   //   "browser_action": {
   //     "default_icon": {},
