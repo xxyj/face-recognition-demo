@@ -74,13 +74,21 @@
                             ctx.beginPath();
                             ctx.lineWidth = 2;
                             ctx.strokeStyle = 'red';
+                            ctx.font = "50px";
+                            ctx.fillStyle = 'blue';
                             for (let face of faces) {
                                 ctx.rect(Math.floor(face.boundingBox.x * scale),
                                     Math.floor(face.boundingBox.y * scale),
                                     Math.floor(face.boundingBox.width * scale),
                                     Math.floor(face.boundingBox.height * scale));
+                                for (let m of face.landmarks) {
+                                    ctx.moveTo(m.location.x + 20, m.location.y);
+                                    ctx.arc(m.location.x, m.location.y, 20, 0, Math.PI * 2);
+                                    ctx.fillText(m.type, m.location.x, m.location.y - 30)
+                                }
+                                ctx.stroke();
                             }
-                            ctx.stroke();
+
                         })
                     // window.setTimeout(draw, 100)
                     requestAnimationFrame(draw)

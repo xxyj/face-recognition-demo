@@ -37,46 +37,43 @@
     </div>
 
     <script type="text/javascript">
-        const imgList = document.getElementsByTagName('img')
-        const faceDetector = new FaceDetector({
-            // 速度优先
-            fastMode: true,
-            // 最大识别
-            maxDetectedFaces: 5
-        });
-        window.onload = main();
+        window.onload = function () {
+            if (!window.faceDetector) {
+                alert('浏览器暂不支持人脸识别，请更换其他浏览器')
+                return;
+            }
+            const imgList = document.getElementsByTagName('img')
+            const faceDetector = new FaceDetector({
+                // 速度优先
+                fastMode: true,
+                // 最大识别
+                maxDetectedFaces: 5
+            });
+            for (const image of imgList) {
+                handleDetect(image)
+            }
 
-        function load(image) {
-            image.onload = function () {
-                setTimeout(handleDetect(image), 100);
-            };
-        }
-
-        function handleDetect(image) {
-            const rate = image.offsetWidth / image.naturalWidth;
-            faceDetector.detect(image)
-                .then(detectedFaces => {
-                    for (const face of detectedFaces) {
-                        const bound = document.createElement('div');
-                        bound.style.position = 'absolute';
-                        bound.style.left = rate * face.boundingBox.x + 'px';
-                        bound.style.top = rate * face.boundingBox.y + 'px';
-                        bound.style.width = rate * face.boundingBox.width + 'px';
-                        bound.style.height = rate * face.boundingBox.height + 'px';
-                        bound.style.border = '2px solid red';
-                        bound.style.borderRadius = '50%';
-                        bound.style.backgroundColor = 'rgba(0, 0, 255, 0.25)';
-                        image.parentNode.appendChild(bound);
-                    }
-                })
-                .catch((e) => {
-                    console.error("Face Detection failed, boo.", e);
-                });
-        }
-
-        function main() {
-            for (const img of imgList) {
-                load(img)
+            async function handleDetect(image) {
+                const rate = image.offsetWidth / image.naturalWidth;
+                const detectedFaces = await faceDetector.detect(image)
+                for (const face of detectedFaces) {
+                    const bound = document.createElement('div');
+                    const left = rate * face.boundingBox.x + 'px';
+                    const top = rate * face.boundingBox.y + 'px';
+                    const width = rate * face.boundingBox.width + 'px';
+                    const height = rate * face.boundingBox.height + 'px'
+                    bound.style.cssText =
+                        `
+                    position:absolute;
+                    left:${left};
+                    top:${top};
+                    width:${width};
+                    height:${height};
+                    border:2px solid red;
+                    border-radius:50%;
+                    background-color:rgba(0, 0, 255, 0.25)`
+                    image.parentNode.appendChild(bound);
+                }
             }
         }
     </script>
