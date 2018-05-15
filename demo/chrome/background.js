@@ -7,6 +7,12 @@ chrome.contextMenus.create({
 });
 
 function read(info, tab) {
+  // var u = new SpeechSynthesisUtterance(info.selectionText);
+  //   voices = speechSynthesis.getVoices();
+  // // 随机声音
+  // let index = Math.floor(voices.length * Math.random());
+  // u.voice = voices[index];
+  // speechSynthesis.speak(u);
   speechSynthesis.speak(new SpeechSynthesisUtterance(info.selectionText));
 }
 
