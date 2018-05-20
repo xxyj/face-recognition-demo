@@ -38,7 +38,7 @@
 
     <script type="text/javascript">
         window.onload = function () {
-            if (!window.faceDetector) {
+            if (!window.FaceDetector) {
                 alert('浏览器暂不支持人脸识别，请更换其他浏览器')
                 return;
             }
@@ -56,6 +56,7 @@
             async function handleDetect(image) {
                 const rate = image.offsetWidth / image.naturalWidth;
                 const detectedFaces = await faceDetector.detect(image)
+                console.log(detectedFaces)
                 for (const face of detectedFaces) {
                     const bound = document.createElement('div');
                     const left = rate * face.boundingBox.x + 'px';

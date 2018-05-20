@@ -2,11 +2,12 @@ chrome.contextMenus.create({
   type: 'normal',
   title: '读读看',
   contexts: ['selection'],
-  id: 'cn',
-  onclick: read,
+  id: 'root',
+   onclick: read,
 });
 
 function read(info, tab) {
+  console.log(tab);
   // var u = new SpeechSynthesisUtterance(info.selectionText);
   //   voices = speechSynthesis.getVoices();
   // // 随机声音

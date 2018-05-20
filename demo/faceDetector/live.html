@@ -54,6 +54,7 @@
                 })
                 .then(function (mediaStream) {
                     video.src = window.URL.createObjectURL(mediaStream);
+                    debugger
                     video.onloadedmetadata = function (e) {
                         video.play();
                     };

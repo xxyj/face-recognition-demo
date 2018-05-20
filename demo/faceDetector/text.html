@@ -16,7 +16,7 @@
                 return;
             }
             const image = document.querySelector('#img')
-            var textDetector = new TextDetector();
+            const textDetector = new TextDetector();
             textDetector.detect(image)
                 .then(boundingBoxes => {
                     for (let box of boundingBoxes) {
