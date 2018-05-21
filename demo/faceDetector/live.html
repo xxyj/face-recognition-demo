@@ -54,7 +54,6 @@
                 })
                 .then(function (mediaStream) {
                     video.src = window.URL.createObjectURL(mediaStream);
-                    debugger
                     video.onloadedmetadata = function (e) {
                         video.play();
                     };
@@ -65,9 +64,8 @@
             // 带上眼镜非常不准
             function draw() {
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                ctx.stroke();
-
                 image.src = canvas.toDataURL('images/png');
+                ctx.stroke();
                 image.onload = () => {
                     scale = canvas.width / image.width;
                     faceDetector.detect(image)
@@ -78,10 +76,11 @@
                             ctx.font = "50px";
                             ctx.fillStyle = 'blue';
                             for (let face of faces) {
-                                ctx.rect(Math.floor(face.boundingBox.x * scale),
-                                    Math.floor(face.boundingBox.y * scale),
-                                    Math.floor(face.boundingBox.width * scale),
-                                    Math.floor(face.boundingBox.height * scale));
+                                const x = Math.floor(face.boundingBox.x * scale);
+                                const y = Math.floor(face.boundingBox.y * scale);
+                                const w = Math.floor(face.boundingBox.width * scale);
+                                const h = Math.floor(face.boundingBox.height * scale);
+                                ctx.rect(x, y, w, h);
                                 for (let m of face.landmarks) {
                                     ctx.moveTo(m.location.x + 20, m.location.y);
                                     ctx.arc(m.location.x, m.location.y, 20, 0, Math.PI * 2);
@@ -96,6 +95,7 @@
                 }
 
             }
+
             draw()
         }()
     </script>
